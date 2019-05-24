@@ -1,9 +1,8 @@
 <template>
   <div class="login-container">
     <el-form autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left"
-             label-width="0px"
-             class="card-box login-form">
-      <h3 class="title">后台管理系统</h3>
+             label-width="0px" v-if="handleFlag==1" class="card-box login-form">
+      <h3 class="title">图书馆图书管理系统</h3>
       <el-form-item prop="username">
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="user"/>
@@ -22,6 +21,37 @@
           登录
         </el-button>
       </el-form-item>
+      <el-form-item>
+        <el-button type="success" style="width:100%;" @click.native.prevent="handleRegister">
+          注册
+        </el-button>
+      </el-form-item>
+    </el-form>
+    <el-form v-else autoComplete="on" :model="newUser" :rules="userRules" ref="newUser" label-position="right"
+             label-width="100px"
+             class="register-form">
+      <h3 class="title">图书管理系统</h3>
+      <el-form-item prop="username" label="用户名：">
+        <el-input v-model="newUser.username" autoComplete="on"/>
+      </el-form-item>
+      <el-form-item prop="password" label="密码：">
+        <el-input type="password" v-model="newUser.password"
+                  autoComplete="on"></el-input>
+      </el-form-item>
+      <el-form-item prop="checkPass" label="确认密码：">
+        <el-input type="password" v-model="newUser.checkPass"
+                  autoComplete="on"></el-input>
+      </el-form-item>
+      <el-form-item>
+      <el-button type="success" style="width:130%;margin-left:-30%" @click="register">
+        立即注册
+      </el-button>
+      </el-form-item>
+      <el-form-item>
+      <el-button type="primary" style="width:130%;margin-left:-30%" @click="returnLogin">
+        返回登录
+      </el-button>
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -31,14 +61,26 @@
     data() {
       return {
         loginForm: {
-          username: 'admin',
-          password: '123456'
+          username: null,
+          password: null
         },
         loginRules: {
           username: [{required: true, trigger: 'blur', message: "请输入用户名"}],
           password: [{required: true, trigger: 'blur', message: "请输入密码"}]
         },
-        loading: false
+        newUser: {
+          username: null,
+          password: null,
+          checkPass: null,
+          nickname: '会员'
+        },
+        userRules: {
+          username: [{required: true,trigger: 'blur', message: "请输入用户名"}],
+          password: [{required: true,trigger: 'blur', message: "请输入密码"}],
+          checkPass: [{required: true,trigger: 'blur', message: "请再次输入密码"}]
+        },
+        loading: false,
+        handleFlag: 1
       }
     },
     methods: {
@@ -49,7 +91,7 @@
             this.$store.dispatch('Login', this.loginForm).then(data => {
               this.loading = false
               if ("success" === data.result) {
-                this.$router.push({path: '/'})
+                this.$router.push({path: '/'});
               } else {
                 this.$message.error("账号/密码错误");
               }
@@ -60,6 +102,39 @@
             return false
           }
         })
+      },
+      handleRegister(){
+        this.handleFlag = 2;
+        this.newUser = {username: null,password: null,checkPass: null,nickname: '会员'};
+      },
+      returnLogin(){
+        this.handleFlag = 1;
+        this.newUser = {username: null,password: null,checkPass: null,nickname: '会员'};
+      },
+      register(){
+        this.$refs.newUser.validate(valid => {
+          if(valid) {
+          if(this.newUser.password === this.newUser.checkPass){
+            this.api({
+              url: '/login/register',
+              method: 'post',
+              data: this.newUser
+            }).then(()=>{
+              this.$message.success('注册成功，首次登录请完善用户信息！');
+              this.handleFlag = 1;
+            }).catch(()=>{
+              this.$message.error('注册失败，用户名已存在');
+            })
+            this.newUser = {username: null,password: null,checkPass: null,nickname: '会员'};
+          }else{
+            this.$message.error('两次密码输入不一致');
+          }
+          }
+          else{
+            return false
+          }
+          }
+        )
       }
     }
   }
@@ -122,7 +197,24 @@
       padding: 35px 35px 15px 35px;
       margin: 120px auto;
     }
-    .el-form-item {
+    .login-form .el-form-item {
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      color: #454545;
+    }
+    .register-form{
+      position: absolute;
+      left: 0;
+      right: 0;
+      width: 400px;
+      padding: 35px 35px 15px 35px;
+      margin: 120px auto;
+    }
+    .register-form .el-form-item .el-form-item__label{
+      color: #eee;
+    }
+    .register-form .el-form-item .el-form-item__content{
       border: 1px solid rgba(255, 255, 255, 0.1);
       background: rgba(0, 0, 0, 0.1);
       border-radius: 5px;

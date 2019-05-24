@@ -5,9 +5,17 @@
 
     <resultMap id="permissionMap" type="com.heeexy.example.util.model.One2Many">
         <id column="userId" property="userId"/>
-        <result column="nickname" property="nickname"/>
+        <result column="nickName" property="nickName"/>
         <result column="roleId" property="roleId"/>
         <result column="roleName" property="roleName"/>
+        <result column="sex" property="sex"/>
+        <result column="age" property="age"/>
+        <result column="native" property="native"/>
+        <result column="workUnit" property="workUnit"/>
+        <result column="duty" property="duty"/>
+        <result column="IDNumber" property="IDNumber"/>
+        <result column="phoneNumber" property="phoneNumber"/>
+        <result column="email" property="email"/>
         <collection property="menuList" ofType="String">
             <id column="menuCode" property="menuCode"/>
         </collection>
@@ -18,8 +26,16 @@
     <select id="getUserPermission" resultMap="permissionMap">
         SELECT
             u.id              userId,
-            u.nickname        nickname,
+            u.nickname        nickName,
             u.role_id         roleId,
+            u.sex             sex,
+            u.age             age,
+            u.native          native,
+            u.work_unit       workUnit,
+            u.duty            duty,
+            u.ID_number       IDNumber,
+            u.phone_number    phoneNumber,
+            u.email           email,
             r.role_name       roleName,
             p.menu_code       menuCode,
             p.permission_code permissionCode

@@ -21,7 +21,7 @@ export const constantRouterMap = [
   }
 ]
 export default new Router({
-  // mode: 'history', //后端支持可开
+  mode: 'history', //后端支持可开
   scrollBehavior: () => ({y: 0}),
   routes: constantRouterMap
 })
@@ -29,17 +29,24 @@ export const asyncRouterMap = [
   {
     path: '/system',
     component: Layout,
-    redirect: '/system/article',
+    redirect: 'noredirect',
     name: '功能模块',
     meta: {title: '功能模块', icon: 'tree'},
     children: [
       {
         path: 'article',
-        name: '文章',
+        name: '图书',
         component: _import('article/article'),
-        meta: {title: '文章', icon: 'example'},
+        meta: {title: '图书信息', icon: 'example'},
         menu: 'article'
       },
+      {
+        path: 'borrow',
+        name: '借阅',
+        component: _import('article/borrow'),
+        meta: {title: '借阅信息', icon: 'example'},
+        menu: 'borrow'
+      }
     ]
   },
   {
@@ -47,16 +54,16 @@ export const asyncRouterMap = [
     component: Layout,
     redirect: '/user/',
     name: '',
-    meta: {title: '用户权限', icon: 'table'},
+    meta: {title: '用户信息', icon: 'table'},
     children: [
       {
-        path: '', name: '用户列表', component: _import('user/user'), meta: {title: '用户列表', icon: 'user'}, menu: 'user'
+        path: '', name: '个人信息', component: _import('user/user'), meta: {title: '个人信息', icon: 'user'}, menu: 'user'
       },
       {
         path: 'role',
-        name: '权限管理',
+        name: '用户管理',
         component: _import('user/role'),
-        meta: {title: '权限管理', icon: 'password'},
+        meta: {title: '用户管理', icon: 'password'},
         menu: 'role'
       },
     ]

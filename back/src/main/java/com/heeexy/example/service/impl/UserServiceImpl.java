@@ -29,10 +29,8 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public JSONObject listUser(JSONObject jsonObject) {
-		CommonUtil.fillPageParam(jsonObject);
-		int count = userDao.countUser(jsonObject);
 		List<JSONObject> list = userDao.listUser(jsonObject);
-		return CommonUtil.successPage(jsonObject, list, count);
+		return CommonUtil.successPage(list);
 	}
 
 	/**

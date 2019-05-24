@@ -2,9 +2,11 @@ package com.heeexy.example.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.dao.LoginDao;
+import com.heeexy.example.dao.UserDao;
 import com.heeexy.example.service.LoginService;
 import com.heeexy.example.service.PermissionService;
 import com.heeexy.example.util.CommonUtil;
+import com.heeexy.example.util.constants.ErrorEnum;
 import com.heeexy.example.util.constants.Constants;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -52,6 +54,20 @@ public class LoginServiceImpl implements LoginService {
 	@Override
 	public JSONObject getUser(String username, String password) {
 		return loginDao.getUser(username, password);
+	}
+
+	/**
+	 * 注册新用户
+	 */
+	@Override
+	public JSONObject register(JSONObject jsonObject){
+		int isDeleted = loginDao.isDeleted(jsonObject);
+		if(isDeleted > 0){
+			loginDao._register(jsonObject);
+		}else{
+			loginDao.register(jsonObject);
+		}
+		return CommonUtil.successJson();
 	}
 
 	/**

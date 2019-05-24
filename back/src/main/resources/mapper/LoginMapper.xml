@@ -16,4 +16,24 @@
           AND u.delete_status = '1'
     </select>
 
+    <insert id="register" parameterType="com.alibaba.fastjson.JSONObject">
+        INSERT INTO sys_user
+        (username, password, nickname, role_id) VALUES
+            (#{username}, #{password}, #{nickname}, '2')
+    </insert>
+
+    <select id="isDeleted" resultType="int">
+        select count(0)
+         from sys_user
+         WHERE username=#{username}
+         AND delete_status='2';
+    </select>
+
+    <update id="_register" parameterType="com.alibaba.fastjson.JSONObject">
+        update sys_user
+        set delete_status = '1',
+        password = #{password}
+        WHERE username = #{username}
+    </update>
+
 </mapper>

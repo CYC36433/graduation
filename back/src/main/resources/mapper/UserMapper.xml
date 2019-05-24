@@ -19,6 +19,14 @@
         <result column="updateTime" property="updateTime"/>
         <result column="lastLoginTime" property="lastLoginTime"/>
         <result column="deleteStatus" property="deleteStatus"/>
+        <result column="sex" property="sex"/>
+        <result column="age" property="age"/>
+        <result column="native" property="native"/>
+        <result column="workUnit" property="workUnit"/>
+        <result column="duty" property="duty"/>
+        <result column="IDNumber" property="IDNumber"/>
+        <result column="phoneNumber" property="phoneNumber"/>
+        <result column="email" property="email"/>
         <collection property="permissionList" ofType="String">
             <id column="permissionName" property="permissionName"/>
         </collection>
@@ -36,11 +44,18 @@
                      role_id                                 roleId,
                      delete_status                           deleteStatus,
                      DATE_FORMAT(create_time, '%Y.%m.%d %T') createTime,
-                     DATE_FORMAT(update_time, '%Y.%m.%d %T') updateTime
+                     DATE_FORMAT(update_time, '%Y.%m.%d %T') updateTime,
+                     sex                                     sex,
+                     age                                     age,
+                     native                                  native,
+                     work_unit                               workUnit,
+                     duty                                    duty,
+                     ID_number                               IDNumber,
+                     phone_number                            phoneNumber,
+                     email                                   email
                  FROM sys_user
                  WHERE delete_status = '1'
                  ORDER BY id
-                 LIMIT #{offSet}, #{pageRow}
              ) u
             LEFT JOIN sys_role r ON r.id = u.roleId
             LEFT JOIN sys_role_permission rp ON rp.role_id = r.id
@@ -59,20 +74,27 @@
 
     <insert id="addUser" useGeneratedKeys="true" keyProperty="userId">
         INSERT INTO sys_user
-        (username, password, nickname, role_id) VALUES
-            (#{username}, #{password}, #{nickname}, #{roleId})
+        (username, password, nickname, role_id,sex,age,native,work_unit,duty,ID_number,phone_number,email) VALUES
+            (#{username}, #{password}, #{nickname}, #{roleId},#{sex},#{age},#{native},#{workUnit},#{duty},#{IDNumber},#{phoneNumber},#{email})
     </insert>
 
     <update id="updateUser">
         UPDATE sys_user
         SET
-        nickname = #{nickname}
+        nickname = #{nickName}
         <if test="password !='' and password !=null">
             , password = #{password}
         </if>
-
         , role_id = #{roleId}
         , delete_status = #{deleteStatus}
+        , sex = #{sex}
+        , age = #{age}
+        , native = #{native}
+        , work_unit = #{workUnit}
+        , duty = #{duty}
+        , ID_number = #{IDNumber}
+        , phone_number= #{phoneNumber}
+        , email = #{email}
         WHERE id = #{userId} and id != 10001
     </update>
     <resultMap id="roleMap" type="com.heeexy.example.util.model.One2Many">

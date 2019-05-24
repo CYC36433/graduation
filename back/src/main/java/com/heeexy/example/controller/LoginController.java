@@ -31,6 +31,14 @@ public class LoginController {
 	}
 
 	/**
+	 * 注册
+	 */
+	@PostMapping("/register")
+	public JSONObject register(@RequestBody JSONObject requestJson){
+		return loginService.register(requestJson);
+	}
+
+	/**
 	 * 查询当前登录用户的信息
 	 */
 	@PostMapping("/getInfo")

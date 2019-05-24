@@ -22,6 +22,11 @@ public interface LoginService {
 	JSONObject getUser(String username, String password);
 
 	/**
+	 * 注册新用户
+	 */
+	JSONObject register(JSONObject jsonObject);
+
+	/**
 	 * 查询当前登录用户的权限等信息
 	 */
 	JSONObject getInfo();

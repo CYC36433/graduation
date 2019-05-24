@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.BookDao">
+
+    <select id="listBook" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT * FROM book a 
+        LEFT JOIN book_type b 
+        on a.type_id = b.type_id
+    </select>
+
+    <select id="countBook" resultType="Integer">
+        SELECT count(0)
+        FROM book 
+    </select>
+
+    <insert id="addBook" parameterType="com.alibaba.fastjson.JSONObject">
+        INSERT INTO book
+            (book_id,type_id,book_name,book_press,publicationtime,book_cover,book_summary,book_qty) 
+        VALUES 
+            (#{book_id},(
+                SELECT type_id FROM book_type
+                WHERE type_name = #{type_name}
+            ),#{book_name},#{book_press},#{publicationtime},#{book_cover},#{book_summary},#{book_qty})
+    </insert>
+
+    <update id="updateBook" parameterType="com.alibaba.fastjson.JSONObject">
+        UPDATE book
+        SET type_id = (
+                SELECT type_id FROM book_type
+                WHERE type_name = #{type_name}
+            ),
+            book_name = #{book_name},
+            book_press = #{book_press},
+            publicationtime = #{publicationtime},
+            book_cover = #{book_cover},
+            book_summary = #{book_summary},
+            book_qty = #{book_qty}
+        WHERE
+            book_id = #{book_id}
+    </update>
+
+    <delete id="deleteBook" parameterType="com.alibaba.fastjson.JSONObject">
+        DELETE FROM book
+        WHERE (book_id) = #{book_id}
+    </delete>
+
+    <select id="listBorrowInfo" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT a.*,b.type_name 
+        FROM borrow_info a LEFT JOIN book_type b 
+        ON a.type_id = b.type_id
+        <if test="borrowerName != '' and borrowerName != null">
+            WHERE a.borrower_name = #{borrowerName}
+        </if>
+    </select>
+
+    <insert id="borrowBook" parameterType="com.alibaba.fastjson.JSONObject">
+        INSERT INTO borrow_info
+            (book_id,type_id,book_name,borrower_name,borrow_time,return_time,returned) 
+        VALUES 
+            (#{book_id},#{type_id},#{book_name},#{borrowerName},#{borrowTime},#{returnTime},#{returned})
+    </insert>
+
+    <update id="updateBorrowInfo">
+        UPDATE borrow_info
+        SET returned = #{returned}
+        WHERE id = #{id}
+    </update>
+</mapper>

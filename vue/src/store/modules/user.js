@@ -12,14 +12,30 @@ const user = {
     role: '',
     menus: [],
     permissions: [],
+    sex: '',
+    age: '',
+    native: '',
+    workunit: '',
+    duty: '',
+    IDnumber: '',
+    phonenumber: '',
+    email: ''
   },
   mutations: {
     SET_USER: (state, userInfo) => {
-      state.nickname = userInfo.nickname;
+      state.nickname = userInfo.nickName;
       state.userId = userInfo.userId;
       state.role = userInfo.roleName;
       state.menus = userInfo.menuList;
       state.permissions = userInfo.permissionList;
+      state.sex = userInfo.sex;
+      state.age = userInfo.age;
+      state.native = userInfo.native;
+      state.workunit = userInfo.workUnit;
+      state.duty = userInfo.duty;
+      state.IDnumber = userInfo.IDNumber;
+      state.phonenumber = userInfo.phoneNumber;
+      state.email = userInfo.email;
     },
     RESET_USER: (state) => {
       state.nickname = "";
@@ -27,6 +43,14 @@ const user = {
       state.role = '';
       state.menus = [];
       state.permissions = [];
+      state.sex = '';
+      state.age = '';
+      state.native = '';
+      state.workunit = '';
+      state.duty = '';
+      state.IDnumber = '';
+      state.phonenumber = '';
+      state.email = '';
     }
   },
   actions: {
@@ -37,7 +61,7 @@ const user = {
           url: "login/auth",
           method: "post",
           data: loginForm
-        }).then(data => {
+        }).then(data => {          
           if (data.result === "success") {
             //cookie中保存前端登录状态
             setToken();
